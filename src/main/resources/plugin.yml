@@ -1,0 +1,15 @@
+name: GulagPlugin
+version: '${project.version}'
+main: net.vnleng.gulag.GulagPlugin
+api-version: 1.20
+description: Aggiunge la possibilità di scatenare scontri nel gulag
+
+commands:
+  gulagsettings:
+    description: Modifica le impostazioni del Gulag
+    usage: /gulagsettings <operation> <extra params>
+    permission: ""
+  gulagtest:
+    description: Prova le funzioni del Gulag
+    usage: /gulagtest
+    permission: ""

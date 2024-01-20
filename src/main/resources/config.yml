@@ -1,0 +1,38 @@
+gulag:
+  loc:
+    base:
+      ==: org.bukkit.Location
+      world: world
+      x: 0.0
+      y: 100.0
+      z: 0.0
+      pitch: 0.0
+      yaw: 0.0
+    exit:
+      ==: org.bukkit.Location
+      world: world
+      x: 0.0
+      y: 100.0
+      z: 50.0
+      pitch: 0.0
+      yaw: 0.0
+    fight:
+      p1:
+        ==: org.bukkit.Location
+        world: world
+        x: -10.0
+        y: 100.0
+        z: 0.0
+        pitch: 0.0
+        yaw: 0.0
+      p2:
+        ==: org.bukkit.Location
+        world: world
+        x: -10.0
+        y: 100.0
+        z: 0.0
+        pitch: 0.0
+        yaw: 0.0
+  countdown:
+    match: 5
+    lonely: 120
