@@ -21,11 +21,9 @@ public class PlayerWorldEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDied(PlayerDeathEvent pde) {
-        //Controllo se il giocatore è già nel gualg
-        //List<MetadataValue> metadata = pde.getPlayer().getMetadata(Settings.META_IN_GULAG);
-        /*metadata.isEmpty() || !metadata.get(0).asBoolean()*///__gp_player_in_gulag deve essere falso: la morte nel gulag non conta
+        //Controllo se il giocatore è già nel gualg, o entrando nel gulag, o morto nel gulag
         Player p = pde.getPlayer();
-        if (!gh.isPlayerInGulag(p) && !gh.isPlayerEnteringGulag(p)) {
+        if (!gh.isPlayerInGulag(p) && !gh.isPlayerEnteringGulag(p) && !gh.isPlayerDeadInGulag(p)) {
             //Elimino i drop / imposto il keepinventory
             pde.setKeepInventory(true);
             pde.setKeepLevel(true);
@@ -47,10 +45,8 @@ public class PlayerWorldEvent implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent pre) {
-        //List<MetadataValue> metadata = pre.getPlayer().getMetadata(Settings.META_IN_GULAG);
-        //!metadata.isEmpty() || metadata.get(0).asBoolean()
         Player p = pre.getPlayer();
-        if (gh.isPlayerEnteringGulag(p)) {
+        if (gh.isPlayerEnteringGulag(p) || gh.isPlayerInGulag(p)) {//Se un giocatore è morto e sta aspettando di entrare nel gulag oppure se il giocatore è morto nel gulag ma non nel match
             BukkitTask br = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -58,7 +54,7 @@ public class PlayerWorldEvent implements Listener {
                     p.teleport(Settings.getInstance().getGulagLocation());
                 }
             }.runTaskLater(GulagPlugin.current_instance, 20L);
-        } else if (gh.isPlayerDeadInGulag(p)) {
+        } else if (gh.isPlayerDeadInGulag(p)) {//Se un giocatore è morto nel match
             BukkitTask br = new BukkitRunnable() {
                 @Override
                 public void run() {

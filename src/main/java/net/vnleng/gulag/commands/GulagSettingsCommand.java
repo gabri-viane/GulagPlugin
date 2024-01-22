@@ -61,11 +61,14 @@ public class GulagSettingsCommand implements CommandExecutor, TabCompleter {
         if (args.length > 1) {//Controllo i parametri
             switch (args[1]) {
                 case "location":
-                    if (args.length > 5) {
+                    if (args.length > 6) {
                         int x = Integer.parseInt(args[3]);
                         int y = Integer.parseInt(args[4]);
                         int z = Integer.parseInt(args[5]);
-                        Location l = new Location(GulagPlugin.current_instance.getServer().getWorld("world"), x, y, z);
+                        String[] y_n_p = args[6].split(":");
+                        float yaw = Float.parseFloat(y_n_p[0]);
+                        float pitch = Float.parseFloat(y_n_p[1]);
+                        Location l = new Location(GulagPlugin.current_instance.getServer().getWorld("world"), x, y, z, yaw, pitch);
                         switch (args[2]) {
                             case "exit": //Imposto la posizione di uscita dal gulag
                                 Settings.getInstance().setExitGulagLocation(l);
@@ -228,6 +231,11 @@ public class GulagSettingsCommand implements CommandExecutor, TabCompleter {
                         l.add("" + pz.getLocation().getBlockZ());
                     }
                     break;
+                case 7:
+                    Player pt = GulagPlugin.current_instance.getServer().getPlayer(sender.getName());
+                    if (pt != null) {
+                        l.add(pt.getYaw() + ":" + pt.getPitch());
+                    }
             }
             return l; //returns the possibility's to the client
         }

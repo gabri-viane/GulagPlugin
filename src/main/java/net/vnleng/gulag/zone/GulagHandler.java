@@ -35,7 +35,7 @@ public class GulagHandler {
     private GulagInfo info;//Gestisce le informazioni del gulag(scoreboard)
     private Integer next_round_taskID = null;//ID della task che gestisce l'inizio di un round
     private Integer timeout_taskID = null;//ID della task che gestisce l'uscita dell'unico giocatore nel gulag
-
+    private FightHandler fh;//Gestore della battaglia corrente
     Generator<BukkitRunnable> free_player_in_gulag = () -> { //task per la liberazione del giocatore
         return new BukkitRunnable() {
             @Override
@@ -47,7 +47,6 @@ public class GulagHandler {
             }
         };
     };
-    private FightHandler fh;//Gestore della battaglia corrente
     Generator<BukkitRunnable> next_round = () -> {//task per la prossima battaglia
         return new BukkitRunnable() {
             @Override
@@ -65,7 +64,7 @@ public class GulagHandler {
                     countdown_listeners.forEach(fh::addCountdownlistener);
                     fh.onEnd(() -> {
                         next_round_taskID = null;
-                        if(player_on_hold.size()>1) {
+                        if (player_on_hold.size() > 1) {
                             Iterator<Player> i = player_on_hold.iterator();
                             Player p3 = i.next();
                             Player p4 = i.next();
@@ -154,7 +153,7 @@ public class GulagHandler {
             }
             if (next_round_taskID == null) {
                 next_round_taskID = next_round.generateInstance().runTaskLater(GulagPlugin.current_instance, 20L * 10L).getTaskId();//Dopo 10 secondi avvio una partita
-                if(player_on_hold.size()>1) {
+                if (player_on_hold.size() > 1) {
                     Iterator<Player> i = player_on_hold.iterator();
                     Player p1 = i.next();
                     Player p2 = i.next();
@@ -255,7 +254,7 @@ public class GulagHandler {
     }
 
     /**
-     * Controlla se un giocatore è stato inserito nel Gulag
+     * Controlla se un giocatore è stato inserito nel Gulag, non ne fanno parte i giocatori che sono nel match nel gulag
      *
      * @param p Giocatore da controllare
      * @return
@@ -275,7 +274,7 @@ public class GulagHandler {
     }
 
     /**
-     * Controllo se un giocatore è morto nel gulag e attende di essere teletrasportato
+     * Controllo se un giocatore è morto nel gulag (nella battaglia) e attende di essere teletrasportato
      *
      * @param p
      * @return
@@ -339,7 +338,7 @@ public class GulagHandler {
         this.countdown_listeners.add(gcl);
     }
 
-    public void removeCountdownListener(GulagCountdownListener gcl){
+    public void removeCountdownListener(GulagCountdownListener gcl) {
         this.countdown_listeners.remove(gcl);
     }
 
